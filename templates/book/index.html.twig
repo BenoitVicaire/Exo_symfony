@@ -3,9 +3,15 @@
 {% block title %}Hello BookController!{% endblock %}
 
 {% block body %}
+<form action="">
+	<input type="text" name="book_id" id="book_id" placeholder="id du livre">
+	<button type="submit" >
+		Chercher
+	</button>
+</form>
 <h1>Mes supers bouquins</h1>
 
 {% for book in books %}
-	<p>-  {{book.title}} -- {{book.author}}</p>
+	<p>- {{book.id}}:  {{book.title}} -- {{book.author}}</p>
 {% endfor %}
 {% endblock %}
