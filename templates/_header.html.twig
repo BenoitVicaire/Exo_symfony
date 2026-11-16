@@ -1,0 +1,10 @@
+{% set links = {
+    'Accueil': 'app_home',
+    'Contact': 'app_contact',
+    'Profil': 'app_user',
+    'Livres': 'app_book',
+} %}
+
+{% for label, route in links %}
+	<a href="{{ path(route) }}">{{ label }}</a>
+{% endfor %}
