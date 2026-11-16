@@ -15,7 +15,7 @@ final class BookController extends AbstractController
 			['id' => 3, 'title' => 'Fondation', 'author' => 'Isaac Asimov'],
 		];
 
-    #[Route('/livres', name: 'app_book')]
+    #[Route('/livres', name: 'app_book' ,requirements:['id' => '\d+'])]
     public function index(Request $request): Response
     {
 		$book_id = $request->query->get("book_id");	
@@ -23,7 +23,7 @@ final class BookController extends AbstractController
 			if (!preg_match('/^\d+$/', $book_id)){
 				return $this->render ('book/index.html.twig', [
 					'error' => 'Id invalide',
-					'books '=>self::BOOKS]);
+					'books'=>self::BOOKS]);
 			}
 			return $this->redirectToRoute('app_book_detail', ['id' => $book_id ]);
 		}
@@ -40,6 +40,6 @@ final class BookController extends AbstractController
 				return $this->render('book/detail.html.twig', ['book' => $book]);
 			}
 		}
-		throw $this->createNotFoundException('Libre introuvable');
+		throw $this->createNotFoundException('Livre introuvable');
 	}
 }
