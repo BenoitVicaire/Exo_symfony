@@ -1,12 +1,14 @@
 {# Chaque menu déroulant : libellé => (libellé du lien => nom de route) #}
 {% set menus = {
-    'Cours': {},
     'Exos': {
         'Contact': 'app_contact',
         'Profil': 'app_user',
-        'Livres': 'app_book',
         'Produit': 'app_product',
         'Calculatrice': 'app_calc',
+    },
+    'Librairie': {
+        'Utilisateurs': 'app_users',
+        'Livres': 'app_book_all',
     },
     'CheatSheet': {
         'Index': 'app_cheatsheet',
