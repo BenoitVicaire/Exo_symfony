@@ -15,6 +15,9 @@
                         <a href="mailto:{{ user.email }}" class="link link-hover">{{ user.email }}</a>
                     </p>
                 </div>
+				<div class="card-actions justify-end">
+					<a href="{{ path('app_user_show', {id: user.id}) }}" class="btn btn-primary btn-sm"> Détail</a>
+				</div>
             </div>
         {% else %}
             <div role="alert" class="alert alert-info sm:col-span-2 lg:col-span-3">

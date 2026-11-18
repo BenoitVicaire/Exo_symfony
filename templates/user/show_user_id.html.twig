@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ user.firstname ~ ' ' ~ user.lastname }}{% endblock %}
+
+{% block body %}
+<div class="mx-auto max-w-md px-4 py-8">
+    <a href="{{ path('app_users') }}" class="link link-hover text-sm">&larr; Retour à la liste</a>
+
+    <h1 class="text-3xl font-bold mt-4 mb-6">Utilisateur</h1>
+
+    <div class="card bg-base-200 shadow-sm">
+        <div class="card-body">
+            <h2 class="card-title">{{ user.firstname ~ ' ' ~ user.lastname }}</h2>
+            <p class="break-all">
+                <a href="mailto:{{ user.email }}" class="link link-hover">{{ user.email }}</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -17,4 +17,8 @@ class UserService
 	public function getUsers():array{
 		return $this->userRepository->findAll();
 	}
+
+	public function getUserById(int $id): ?User{
+		return $this->userRepository->find($id);
+	}
 }

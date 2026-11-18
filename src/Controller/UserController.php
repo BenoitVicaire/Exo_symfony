@@ -49,4 +49,17 @@ final class UserController extends AbstractController
 			'users' => $this->userService->getUsers(),
 		]);
 	}
+
+	#[Route('/user/{id}', name: 'app_user_show', requirements:['id' => '\d+'])]
+	public function getUserById(int $id): Response
+	{
+		$user = $this->userService->getUserById($id);
+
+		if ($user === null){
+			throw $this->createNotFoundException('Utilisateur introuvable');
+		}
+		return $this->render('user/show_user_id.html.twig', [
+			'user' => $user,
+		]);
+	}
 }
