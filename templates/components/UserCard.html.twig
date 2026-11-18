@@ -1,0 +1,11 @@
+{% props user %}
+
+<div class="card bg-base-200 shadow-sm">
+    <div class="card-body">
+        <h2 class="card-title">{{ user.firstname }} {{ user.lastname }}</h2>
+        <p>{{ user.email }}</p>
+        <div class="card-actions justify-end">
+            <a href="{{ path('app_user_show', {id: user.id}) }}" class="btn btn-primary btn-sm">Détail</a>
+        </div>
+    </div>
+</div>

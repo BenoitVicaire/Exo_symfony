@@ -12,9 +12,7 @@
     </form>
 
     {% if error is defined and error %}
-        <div role="alert" class="alert alert-error mb-4">
-            <span>{{ error }}</span>
-        </div>
+        <twig:Alert type="error" :message="error" class="mb-4" />
     {% endif %}
 
     <div class="overflow-x-auto rounded-box border border-base-300">
@@ -24,6 +22,8 @@
                     <th>Id</th>
                     <th>Titre</th>
                     <th>Auteur</th>
+                    <th>Catégories</th>
+                    <th>Loué par</th>
                 </tr>
             </thead>
             <tbody>
@@ -32,6 +32,22 @@
                         <td>{{ book.id }}</td>
                         <td><a href="{{ path('app_book_detail', {id: book.id}) }}" class="link link-primary">{{ book.title }}</a></td>
                         <td>{{ book.author }}</td>
+                        <td>
+                            <div class="flex flex-wrap gap-1">
+                                {% for category in book.categories %}
+                                    <a href="{{ path('app_category_show', {id: category.id}) }}" class="badge badge-outline">{{ category.name }}</a>
+                                {% else %}
+                                    <span class="opacity-50">Aucune</span>
+                                {% endfor %}
+                            </div>
+                        </td>
+                        <td>
+                            {% if book.user %}
+                                <a href="{{ path('app_user_show', {id: book.user.id}) }}" class="link link-hover">{{ book.user.firstname ~ ' ' ~ book.user.lastname }}</a>
+                            {% else %}
+                                <span class="opacity-50">Disponible</span>
+                            {% endif %}
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>

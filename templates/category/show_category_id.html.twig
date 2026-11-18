@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ category.name }}{% endblock %}
+
+{% block body %}
+<div class="mx-auto max-w-md px-4 py-8">
+    <a href="{{ path('app_categories') }}" class="link link-hover text-sm">&larr; Retour à la liste</a>
+
+    <h1 class="text-3xl font-bold mt-4 mb-6">Catégorie</h1>
+
+    <div class="card bg-base-200 shadow-sm">
+        <div class="card-body">
+            <h2 class="card-title">{{ category.name }}</h2>
+            <p class="opacity-70">Id : {{ category.id }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

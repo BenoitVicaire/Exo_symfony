@@ -19,14 +19,10 @@
     </form>
 
     {% if result is not null %}
-        <div role="alert" class="alert alert-success mt-6">
-            <span>Le résultat est : <strong>{{ result }}</strong></span>
-        </div>
+        <twig:Alert type="success" :message="'Résultat : ' ~ result" class="mt-6" />
     {% endif %}
     {% if error %}
-        <div role="alert" class="alert alert-error mt-6">
-            <span>{{ error }}</span>
-        </div>
+        <twig:Alert type="error" :message="error" class="mt-6" />
     {% endif %}
 </div>
 {% endblock %}

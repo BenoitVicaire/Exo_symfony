@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Catégories{% endblock %}
+
+{% block body %}
+<div class="mx-auto max-w-5xl px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6">Catégories</h1>
+
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {% for category in categories %}
+            <div class="card bg-base-200 shadow-sm">
+                <div class="card-body">
+                    <h2 class="card-title">{{ category.name }}</h2>
+                    <div class="card-actions justify-end">
+                        <a href="{{ path('app_category_show', {id: category.id}) }}" class="btn btn-primary btn-sm">Détail</a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <twig:Alert message="Aucune catégorie." class="sm:col-span-2 lg:col-span-3" />
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

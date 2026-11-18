@@ -8,21 +8,9 @@
 
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {% for user in users %}
-            <div class="card bg-base-200 shadow-sm">
-                <div class="card-body">
-                    <h2 class="card-title">{{ user.firstname ~ ' ' ~ user.lastname }}</h2>
-                    <p class="break-all">
-                        <a href="mailto:{{ user.email }}" class="link link-hover">{{ user.email }}</a>
-                    </p>
-                </div>
-				<div class="card-actions justify-end">
-					<a href="{{ path('app_user_show', {id: user.id}) }}" class="btn btn-primary btn-sm"> Détail</a>
-				</div>
-            </div>
+            <twig:UserCard :user="user" />
         {% else %}
-            <div role="alert" class="alert alert-info sm:col-span-2 lg:col-span-3">
-                <span>Aucun utilisateur.</span>
-            </div>
+            <twig:Alert message="Aucun utilisateur." class="sm:col-span-2 lg:col-span-3" />
         {% endfor %}
     </div>
 </div>

@@ -12,9 +12,7 @@
     </form>
 
     {% if error is defined and error %}
-        <div role="alert" class="alert alert-error mb-4">
-            <span>{{ error }}</span>
-        </div>
+        <twig:Alert type="error" :message="error" class="mb-4" />
     {% endif %}
 
     <div class="overflow-x-auto rounded-box border border-base-300">

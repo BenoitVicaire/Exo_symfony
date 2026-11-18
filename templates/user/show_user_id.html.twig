@@ -8,13 +8,6 @@
 
     <h1 class="text-3xl font-bold mt-4 mb-6">Utilisateur</h1>
 
-    <div class="card bg-base-200 shadow-sm">
-        <div class="card-body">
-            <h2 class="card-title">{{ user.firstname ~ ' ' ~ user.lastname }}</h2>
-            <p class="break-all">
-                <a href="mailto:{{ user.email }}" class="link link-hover">{{ user.email }}</a>
-            </p>
-        </div>
-    </div>
+    <twig:UserCard :user="user" />
 </div>
 {% endblock %}

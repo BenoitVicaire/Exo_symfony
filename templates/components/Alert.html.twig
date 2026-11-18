@@ -1,0 +1,12 @@
+{% props message, type = 'info' %}
+
+{% set classes = {
+	info: 'alert-info',
+	success: 'alert-success',
+	warning: 'alert-warning',
+	error: 'alert-error',
+} %}
+
+<div role="alert" {{ attributes.defaults({class: 'alert ' ~ (classes[type] ?? 'alert-info')}) }}>
+	<span>{{ message }}</span>
+</div>
