@@ -1,14 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello UserController!{% endblock %}
+{% block title %}Profil{% endblock %}
 
 {% block body %}
-<h1>Page profil</h1>
-<p>Veuillez saisir le nom d'un profil : </p>
-<form action="">
-	<input type="text" id="name" name ="name" placeholder="Nom?">
-	<button type="submit" >
-		Chercher
-	</button>
-</form>
+<div class="mx-auto max-w-md px-4 py-8">
+    <h1 class="text-3xl font-bold mb-2">Page profil</h1>
+    <p class="mb-4">Veuillez saisir le nom d'un profil :</p>
+
+    <form action="{{ path('app_user') }}" class="join w-full">
+        <input type="text" id="name" name="name" placeholder="Nom ?" class="input input-bordered join-item w-full" required>
+        <button type="submit" class="btn btn-primary join-item">Chercher</button>
+    </form>
+</div>
 {% endblock %}

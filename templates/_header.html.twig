@@ -1,12 +1,82 @@
-{% set links = {
-    'Accueil': 'app_home',
-    'Contact': 'app_contact',
-    'Profil': 'app_user',
-    'Livres': 'app_book',
-    'Produit': 'app_product',
-	'Calculatrice': 'app_calc'
+{# Chaque menu déroulant : libellé => (libellé du lien => nom de route) #}
+{% set menus = {
+    'Cours': {},
+    'Exos': {
+        'Contact': 'app_contact',
+        'Profil': 'app_user',
+        'Livres': 'app_book',
+        'Produit': 'app_product',
+        'Calculatrice': 'app_calc',
+    },
+    'CheatSheet': {
+        'Index': 'app_cheatsheet',
+        'Mise en place': 'app_cheatsheet_setup',
+        'Controller': 'app_cheatsheet_controller',
+        'Entity': 'app_cheatsheet_entity',
+        'Tailwind': 'app_cheatsheet_tailwind',
+    },
 } %}
 
-{% for label, route in links %}
-	<a href="{{ path(route) }}">{{ label }}</a>
-{% endfor %}
+<header class="navbar bg-base-100 shadow-sm px-4">
+    <div class="navbar-start">
+        {# Menu hamburger sur mobile #}
+        <div class="dropdown md:hidden">
+            <div tabindex="0" role="button" class="btn btn-ghost" aria-label="Menu">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </div>
+            <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow">
+                {% for menu_label, links in menus %}
+                    <li>
+                        <span class="menu-title">{{ menu_label }}</span>
+                        <ul>
+                            {% for label, route in links %}
+                                <li><a href="{{ path(route) }}" class="{{ app.current_route == route ? 'menu-active' : '' }}">{{ label }}</a></li>
+                            {% else %}
+                                <li class="menu-disabled"><span>Bientôt disponible</span></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <a href="{{ path('app_home') }}" class="btn btn-ghost text-xl">Symfony</a>
+    </div>
+
+    {# Menus déroulants sur grand écran #}
+    <nav class="navbar-center hidden md:flex">
+        <ul class="menu menu-horizontal px-1">
+            {% for menu_label, links in menus %}
+                <li>
+                    <details>
+                        <summary>{{ menu_label }}</summary>
+                        <ul class="bg-base-100 rounded-t-none p-2 w-48 z-10 shadow">
+                            {% for label, route in links %}
+                                <li><a href="{{ path(route) }}" class="{{ app.current_route == route ? 'menu-active' : '' }}">{{ label }}</a></li>
+                            {% else %}
+                                <li class="menu-disabled"><span>Bientôt disponible</span></li>
+                            {% endfor %}
+                        </ul>
+                    </details>
+                </li>
+            {% endfor %}
+        </ul>
+    </nav>
+
+    {# Bascule clair / sombre #}
+    <div class="navbar-end">
+        <label class="swap swap-rotate btn btn-ghost btn-circle" aria-label="Basculer entre thème clair et sombre">
+            <input type="checkbox" id="theme-toggle">
+            {# Soleil : visible quand le thème est clair (clic = passer en sombre) #}
+            <svg class="swap-off h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="4"/>
+                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+            </svg>
+            {# Lune : visible quand le thème est sombre #}
+            <svg class="swap-on h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+        </label>
+    </div>
+</header>

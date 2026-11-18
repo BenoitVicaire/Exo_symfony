@@ -1,15 +1,21 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ProductController!{% endblock %}
+{% block title %}Produit{% endblock %}
 
 {% block body %}
-<h1>Page produit</h1>
-<h2>Veuillez saisir l'id d'un produit</h2>
-<form action="">
-	<input type="number" name="id" id="id" placeholder="id">
-	<button type="submit"> Chercher</button>
-</form>
-{% if error is defined %}
-    <p>{{ error }}</p>
-{% endif %}
+<div class="mx-auto max-w-md px-4 py-8">
+    <h1 class="text-3xl font-bold mb-2">Page produit</h1>
+    <p class="mb-4">Veuillez saisir l'id d'un produit :</p>
+
+    <form action="{{ path('app_product') }}" class="join w-full">
+        <input type="number" name="id" id="id" placeholder="Id" class="input input-bordered join-item w-full">
+        <button type="submit" class="btn btn-primary join-item">Chercher</button>
+    </form>
+
+    {% if error is defined and error %}
+        <div role="alert" class="alert alert-error mt-4">
+            <span>{{ error }}</span>
+        </div>
+    {% endif %}
+</div>
 {% endblock %}

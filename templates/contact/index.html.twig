@@ -1,8 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ContactController!{% endblock %}
+{% block title %}Contact{% endblock %}
 
 {% block body %}
-<h2>Email : {{email}}</h2>
-<h2>Telephone : {{phone_number}}</h2>
+<div class="mx-auto max-w-md px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6">Contact</h1>
+
+    <div class="card bg-base-200 shadow-sm">
+        <div class="card-body">
+            <p>
+                <span class="font-semibold">E-mail :</span>
+                <a href="mailto:{{ email }}" class="link link-primary">{{ email }}</a>
+            </p>
+            <p>
+                <span class="font-semibold">Téléphone :</span>
+                <a href="tel:{{ phone_number|replace({' ': ''}) }}" class="link link-primary">{{ phone_number }}</a>
+            </p>
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'cheatsheet/layout.html.twig' %}
+
+{% block title %}CheatSheets{% endblock %}
+
+{% block sheet %}
+<h1 class="text-3xl font-bold mb-2">CheatSheets</h1>
+<p class="mb-6">Mémo rapide : où trouver la commande ou le snippet dont j'ai besoin.</p>
+
+<div class="grid gap-4 sm:grid-cols-2">
+    <a href="{{ path('app_cheatsheet_setup') }}" class="card bg-base-200 hover:bg-base-300">
+        <div class="card-body">
+            <h2 class="card-title">Mise en place</h2>
+            <p>Installer le projet, les paquets, la base de données, lancer le serveur.</p>
+        </div>
+    </a>
+    <a href="{{ path('app_cheatsheet_controller') }}" class="card bg-base-200 hover:bg-base-300">
+        <div class="card-body">
+            <h2 class="card-title">Controller</h2>
+            <p>Routes, paramètres, rendu Twig, redirections, services.</p>
+        </div>
+    </a>
+    <a href="{{ path('app_cheatsheet_entity') }}" class="card bg-base-200 hover:bg-base-300">
+        <div class="card-body">
+            <h2 class="card-title">Entity</h2>
+            <p>Entités, relations, migrations, fixtures, repository.</p>
+        </div>
+    </a>
+    <a href="{{ path('app_cheatsheet_tailwind') }}" class="card bg-base-200 hover:bg-base-300">
+        <div class="card-body">
+            <h2 class="card-title">Tailwind</h2>
+            <p>Installer Tailwind CSS et daisyUI, compiler le CSS.</p>
+        </div>
+    </a>
+</div>
+{% endblock %}

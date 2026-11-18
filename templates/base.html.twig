@@ -1,9 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr" data-theme="light">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+
+        {# Applique le thème mémorisé avant le rendu, pour éviter un flash de couleur #}
+        <script>
+            (function () {
+                try {
+                    var theme = localStorage.getItem('theme');
+                    if (!theme) {
+                        theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                    }
+                    document.documentElement.setAttribute('data-theme', theme);
+                } catch (e) {}
+            })();
+        </script>
+
         {% block stylesheets %}
         {% endblock %}
 
@@ -18,8 +33,21 @@
         <script src="https://cdn.jsdelivr.net/npm/frankenphp-hot-reload/+esm" type="module"></script>
         {% endif %}
     </head>
-    <body>
-		{% include '_header.html.twig' %}
+    <body class="bg-base-100 text-base-content min-h-screen">
+        {% include '_header.html.twig' %}
         {% block body %}{% endblock %}
+
+        <script>
+            (function () {
+                var toggle = document.getElementById('theme-toggle');
+                if (!toggle) { return; }
+                toggle.checked = document.documentElement.getAttribute('data-theme') === 'dark';
+                toggle.addEventListener('change', function () {
+                    var theme = toggle.checked ? 'dark' : 'light';
+                    document.documentElement.setAttribute('data-theme', theme);
+                    try { localStorage.setItem('theme', theme); } catch (e) {}
+                });
+            })();
+        </script>
     </body>
 </html>

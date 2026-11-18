@@ -1,10 +1,52 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Hello ExempleController!{% endblock %}
+{% block title %}Cours et exos Symfony{% endblock %}
 
 {% block body %}
+<section class="hero bg-base-200 min-h-[28rem]">
+    <div class="hero-content flex-col text-center">
+        <img
+            src="https://symfony.com/logos/symfony_dynamic_01.svg"
+            alt="Logo Symfony"
+            class="max-w-xs w-full"
+        >
+        <div class="max-w-xl">
+            <h1 class="text-4xl font-bold">Cours et exos Symfony</h1>
+            <p class="py-4">
+                Bienvenue sur mon application d'apprentissage. Retrouvez ici les
+                exercices réalisés au fil du cours, avec leurs routes, contrôleurs
+                et templates Twig.
+            </p>
+            <div class="flex flex-wrap justify-center gap-3">
+                <a href="https://symfony.com/doc/current/index.html" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
+                    Lire la documentation
+                </a>
+                <a href="https://symfony.com" class="btn btn-outline" target="_blank" rel="noopener noreferrer">
+                    Site de Symfony
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
 
-<h1>Cours et exo symfony</h1>
+<section class="mx-auto max-w-3xl px-4 py-10">
+    <h2 class="text-2xl font-bold mb-3">C'est quoi Symfony ?</h2>
+    <p class="mb-3">
+        Symfony est un framework PHP open source, utilisé pour construire des sites
+        web, des API et des applications de toutes tailles. Il repose sur un
+        ensemble de composants réutilisables (routage, Twig, formulaires,
+        sécurité, etc.) que l'on assemble selon les besoins du projet.
+    </p>
+    <p>
+        Il suit le modèle requête / réponse : une route désigne un contrôleur,
+        qui s'appuie sur des services pour préparer les données, puis renvoie
+        une réponse, souvent un template Twig.
+    </p>
 
-
+    <ul class="menu menu-horizontal bg-base-200 rounded-box mt-6">
+        <li><a href="https://symfony.com/doc/current/index.html" target="_blank" rel="noopener noreferrer">Documentation</a></li>
+        <li><a href="https://symfony.com/what-is-symfony" target="_blank" rel="noopener noreferrer">Qu'est-ce que Symfony ?</a></li>
+        <li><a href="https://symfony.com/doc/current/best_practices.html" target="_blank" rel="noopener noreferrer">Bonnes pratiques</a></li>
+    </ul>
+</section>
 {% endblock %}

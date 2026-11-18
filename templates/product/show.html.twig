@@ -1,7 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Show{% endblock %}
+{% block title %}Produit {{ id }}{% endblock %}
 
 {% block body %}
-<h2>Id : {{id}}</h2>
+<div class="mx-auto max-w-md px-4 py-8">
+    <a href="{{ path('app_product') }}" class="link link-hover text-sm">&larr; Nouvelle recherche</a>
+
+    <div class="card bg-base-200 shadow-sm mt-4">
+        <div class="card-body">
+            <h1 class="card-title">Produit</h1>
+            <p><span class="font-semibold">Id :</span> {{ id }}</p>
+        </div>
+    </div>
+</div>
 {% endblock %}

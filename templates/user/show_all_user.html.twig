@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Utilisateurs{% endblock %}
+
+{% block body %}
+<div class="mx-auto max-w-5xl px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6">Utilisateurs</h1>
+
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {% for user in users %}
+            <div class="card bg-base-200 shadow-sm">
+                <div class="card-body">
+                    <h2 class="card-title">{{ user.firstname ~ ' ' ~ user.lastname }}</h2>
+                    <p class="break-all">
+                        <a href="mailto:{{ user.email }}" class="link link-hover">{{ user.email }}</a>
+                    </p>
+                </div>
+            </div>
+        {% else %}
+            <div role="alert" class="alert alert-info sm:col-span-2 lg:col-span-3">
+                <span>Aucun utilisateur.</span>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -6,9 +6,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Service\UserService;
 
 final class UserController extends AbstractController
 {
+	public function __construct(private UserService $userService)
+	{
+	}
     #[Route('/user', name: 'app_user')]
     public function index(Request $request): Response
     {
@@ -35,6 +39,14 @@ final class UserController extends AbstractController
 			'name' => $name,
 			'age' => $age,
 			'city' => $city,
+		]);
+	}
+
+	#[Route('/users', name: 'app_users')]
+	public function showAllUser(): Response
+	{
+		return $this->render('user/show_all_user.html.twig', [
+			'users' => $this->userService->getUsers(),
 		]);
 	}
 }

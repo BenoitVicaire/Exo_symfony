@@ -1,24 +1,32 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello CalcController!{% endblock %}
+{% block title %}Calculatrice{% endblock %}
 
 {% block body %}
-<h1>Calculatrice</h1>
-<form action="{{ path('app_calc') }}">
-	<input type="number" name="nb1" id="nb1" placeholder="Nombre">
-	<select name="operateur" id="operateur">
-		<option value="+">+</option>
-		<option value="-">-</option>
-		<option value="*">*</option>
-		<option value="/">/</option>
-	</select>
-	<input type="number" name="nb2" id="nb2" placeholder="Nombre">
-	<button type="submit">Calculer</button>
-</form>
-{% if result is not null %}
-	<p>Le resultat est :{{ result }}</p>
-{% endif %}
-{% if error %}
-	<p>{{error}}</p>
-{% endif %}
+<div class="mx-auto max-w-lg px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6">Calculatrice</h1>
+
+    <form action="{{ path('app_calc') }}" class="flex flex-wrap items-center gap-2">
+        <input type="number" name="nb1" id="nb1" placeholder="Nombre" class="input input-bordered w-32" required>
+        <select name="operateur" id="operateur" class="select select-bordered w-20">
+            <option value="+">+</option>
+            <option value="-">-</option>
+            <option value="*">*</option>
+            <option value="/">/</option>
+        </select>
+        <input type="number" name="nb2" id="nb2" placeholder="Nombre" class="input input-bordered w-32" required>
+        <button type="submit" class="btn btn-primary">Calculer</button>
+    </form>
+
+    {% if result is not null %}
+        <div role="alert" class="alert alert-success mt-6">
+            <span>Le résultat est : <strong>{{ result }}</strong></span>
+        </div>
+    {% endif %}
+    {% if error %}
+        <div role="alert" class="alert alert-error mt-6">
+            <span>{{ error }}</span>
+        </div>
+    {% endif %}
+</div>
 {% endblock %}

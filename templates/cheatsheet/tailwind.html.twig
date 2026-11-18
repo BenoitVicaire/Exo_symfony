@@ -1,0 +1,62 @@
+{% extends 'cheatsheet/layout.html.twig' %}
+
+{% block title %}CheatSheet : Tailwind{% endblock %}
+
+{% block sheet %}
+<h1 class="text-3xl font-bold mb-6">Tailwind CSS et daisyUI</h1>
+
+<section class="mb-8">
+    <h2 class="text-xl font-bold mb-2">1. Installer Tailwind</h2>
+<pre class="bg-base-300 rounded-box p-4 text-sm overflow-x-auto"><code>composer require symfonycasts/tailwind-bundle
+php bin/console tailwind:init
+php bin/console cache:clear</code></pre>
+    <p class="mt-2">Le bundle utilise le binaire autonome de Tailwind : pas besoin de Node.js. <code>tailwind:init</code> choisit la version (4) ; le <code>cache:clear</code> est nécessaire pour qu'elle soit prise en compte.</p>
+</section>
+
+<section class="mb-8">
+    <h2 class="text-xl font-bold mb-2">2. Ajouter daisyUI</h2>
+    <p class="mb-2">Télécharger les deux fichiers dans <code>assets/styles/</code> (PowerShell) :</p>
+<pre class="bg-base-300 rounded-box p-4 text-sm overflow-x-auto"><code>cd assets/styles
+curl.exe -sLO https://github.com/saadeghi/daisyui/releases/latest/download/daisyui.mjs
+curl.exe -sLO https://github.com/saadeghi/daisyui/releases/latest/download/daisyui-theme.mjs
+cd ../..</code></pre>
+    <p class="mt-2 mb-2">Puis dans <code>assets/styles/app.css</code> :</p>
+<pre class="bg-base-300 rounded-box p-4 text-sm overflow-x-auto"><code>@import "tailwindcss";
+
+@source not "./daisyui{,*}.mjs";
+@plugin "./daisyui.mjs";</code></pre>
+</section>
+
+<section class="mb-8">
+    <h2 class="text-xl font-bold mb-2">3. Compiler</h2>
+<pre class="bg-base-300 rounded-box p-4 text-sm overflow-x-auto"><code>php bin/console tailwind:build --watch</code></pre>
+    <p class="mt-2">À laisser tourner dans un terminal pendant qu'on travaille : il recompile à chaque modification. Sans ça, les nouvelles classes n'apparaissent pas.</p>
+</section>
+
+<section class="mb-8">
+    <h2 class="text-xl font-bold mb-2">Le CSS est bien chargé ?</h2>
+    <ul class="list-disc pl-6 space-y-1">
+        <li><code>assets/app.js</code> contient <code>import './styles/app.css';</code></li>
+        <li><code>base.html.twig</code> contient <code>importmap('app')</code></li>
+        <li>Test rapide : un <code>&lt;button class="btn btn-primary"&gt;Test&lt;/button&gt;</code> doit apparaître stylé.</li>
+    </ul>
+</section>
+
+<section class="mb-8">
+    <h2 class="text-xl font-bold mb-2">Classes utiles</h2>
+    <ul class="list-disc pl-6 space-y-1">
+        <li>Espacement : <code>p-4</code>, <code>px-4</code>, <code>py-8</code>, <code>mb-6</code>, <code>gap-4</code></li>
+        <li>Texte : <code>text-xl</code>, <code>text-3xl</code>, <code>font-bold</code></li>
+        <li>Mise en page : <code>flex</code>, <code>grid</code>, <code>mx-auto</code>, <code>max-w-3xl</code></li>
+        <li>Responsive : <code>md:flex</code> (à partir de 768 px), <code>hidden md:flex</code></li>
+        <li>daisyUI : <code>btn</code>, <code>card</code>, <code>navbar</code>, <code>menu</code>, <code>dropdown</code>, <code>hero</code>, <code>tabs</code></li>
+    </ul>
+</section>
+
+<section class="mb-8">
+    <h2 class="text-xl font-bold mb-2">En production</h2>
+<pre class="bg-base-300 rounded-box p-4 text-sm overflow-x-auto"><code>php bin/console tailwind:build --minify
+php bin/console asset-map:compile</code></pre>
+    <p class="mt-2">Dans cet ordre : Tailwind d'abord, puis AssetMapper.</p>
+</section>
+{% endblock %}
