@@ -1,0 +1,10 @@
+{% set classes = {
+	success: 'badge-success',
+	warning: 'badge-warning',
+	error: 'badge-error',
+	neutral: 'badge-neutral',
+} %}
+
+<span {{ attributes.defaults({class: 'badge ' ~  (classes[variant] ?? 'badge-neutral')}) }}>
+	{{ label }}
+</span>

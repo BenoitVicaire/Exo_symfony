@@ -49,4 +49,11 @@
         <li><a href="https://symfony.com/doc/current/best_practices.html" target="_blank" rel="noopener noreferrer">Bonnes pratiques</a></li>
     </ul>
 </section>
+<section class="mx-auto max-w-5xl px-4 pb-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+	{% for formation in formations %}
+		<twig:FormationCard :formation="formation" />
+	{% else %}
+		<twig:Alert message="Aucune formation pour le moment." class="sm:col-span-2 lg:col-span-3" />
+	{% endfor %}
+</section>
 {% endblock %}
