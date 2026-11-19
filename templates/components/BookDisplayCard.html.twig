@@ -1,13 +1,10 @@
-{% extends 'base.html.twig' %}
+{% props books %}
 
-{% block title %}Livres{% endblock %}
-
-{% block body %}
 <div class="mx-auto max-w-3xl px-4 py-8">
     <h1 class="text-3xl font-bold mb-6">Mes supers bouquins</h1>
 
-    <form action="{{ path('app_book') }}" class="join w-full mb-4">
-        <input type="text" name="book_id" id="book_id" placeholder="Id du livre" class="input input-bordered join-item w-full">
+    <form action="{{ path('app_book_search') }}" method="get" class="join w-full mb-4">
+        <input type="text" name="title" id="title" placeholder="Titre du livre" class="input input-bordered join-item w-full">
         <button type="submit" class="btn btn-primary join-item">Chercher</button>
     </form>
 
@@ -54,4 +51,3 @@
         </table>
     </div>
 </div>
-{% endblock %}
