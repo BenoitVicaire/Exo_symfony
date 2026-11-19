@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Repository\BookRepository;
 use App\Entity\Book;
+use Doctrine\DBAL\Types\DateImmutableType;
 
 class BookService
 {
@@ -31,5 +32,19 @@ class BookService
 	{
 		return $this->book_repository->findByTitle($title);
 	}
+	/**
+	 * @return Book[]
+	 */
+	public function getBookPublishedAfterDate(\DateTimeInterface $date): array
+	{
+		return $this->book_repository->findPublishedAfter($date);
+	}
 
+	/**
+	 * @return Book[]
+	 */
+	public function getBookByCategories(string $categoryName): array
+	{
+		return $this->book_repository->findByCategory($categoryName);
+	}
 }

@@ -11,10 +11,10 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class BookRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, Book::class);
-    }
+	public function __construct(ManagerRegistry $registry)
+	{
+		parent::__construct($registry, Book::class);
+	}
 
 //    /**
 //     * @return Book[] Returns an array of Book objects
@@ -40,6 +40,10 @@ class BookRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+	/**
+	 * @return Book[] 
+	 */
 	public function findByTitle(string $title): array
 	{
 		return $this->createQueryBuilder('b')
@@ -48,5 +52,31 @@ class BookRepository extends ServiceEntityRepository
 			->OrderBy('b.title', 'ASC')
 			->getQuery()
 			->getResult();
+	}
+
+	/**
+	 * @return Book[] 
+	 */
+	public function findPublishedAfter(\DateTimeInterface $date): array
+	{
+		return $this->createQueryBuilder('b')
+			->andWhere('b.publishAt >= :date')
+			->setParameter('date', $date)
+			->orderBy('b.publishAt', 'DESC')
+			->getQuery()
+			->getResult();
+	}
+
+	/**
+	 * @return Book[]
+	 */
+	public function findByCategory(string $categoryName): array
+	{
+		return $this->createQueryBuilder('b')
+		->innerJoin('b.categories', 'c' )
+		->andWhere('c.name LIKE :name')
+		->setParameter('name', '%' . $categoryName . '%')
+		->getQuery()
+		->getResult();
 	}
 }

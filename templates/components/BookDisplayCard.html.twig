@@ -1,53 +1,93 @@
 {% props books %}
 
-<div class="mx-auto max-w-3xl px-4 py-8">
-    <h1 class="text-3xl font-bold mb-6">Mes supers bouquins</h1>
+{% set current_title = app.request.query.get('title') %}
+{% set current_date = app.request.query.get('date') %}
+{% set current_category = app.request.query.get('categoryName') %}
+{% set is_filtered = current_title or current_date or current_category %}
 
-    <form action="{{ path('app_book_search') }}" method="get" class="join w-full mb-4">
-        <input type="text" name="title" id="title" placeholder="Titre du livre" class="input input-bordered join-item w-full">
-        <button type="submit" class="btn btn-primary join-item">Chercher</button>
-    </form>
+<div class="mx-auto max-w-5xl px-4 py-8">
+    <div class="flex flex-wrap items-end justify-between gap-2 mb-6">
+        <h1 class="text-3xl font-bold">Mes supers bouquins</h1>
+        <span class="badge badge-neutral">{{ books|length }} livre{{ books|length > 1 ? 's' : '' }}</span>
+    </div>
 
-    {% if error is defined and error %}
-        <twig:Alert type="error" :message="error" class="mb-4" />
+    {# Recherche : un onglet par critère #}
+    <div class="tabs tabs-box mb-6">
+        <input type="radio" name="search_tabs" class="tab" aria-label="Par titre" {{ current_date or current_category ? '' : 'checked' }}>
+        <div class="tab-content hidden [.tab:checked+&]:block order-1 w-full bg-base-100 border-base-300 p-4">
+            <form action="{{ path('app_book_search') }}" method="get" class="join w-full">
+                <input type="text" name="title" value="{{ current_title }}" placeholder="Titre du livre" class="input input-bordered join-item w-full">
+                <button type="submit" class="btn btn-primary join-item w-32">Chercher</button>
+            </form>
+        </div>
+
+        <input type="radio" name="search_tabs" class="tab" aria-label="Par date de publication" {{ current_date ? 'checked' : '' }}>
+        <div class="tab-content hidden [.tab:checked+&]:block order-1 w-full bg-base-100 border-base-300 p-4">
+            <form action="{{ path('app_book_search_published_after') }}" method="get" class="join w-full">
+                <input type="date" name="date" value="{{ current_date }}" class="input input-bordered join-item w-full">
+                <button type="submit" class="btn btn-primary join-item w-32">Chercher</button>
+            </form>
+        </div>
+
+        <input type="radio" name="search_tabs" class="tab" aria-label="Par catégorie" {{ current_category ? 'checked' : '' }}>
+        <div class="tab-content hidden [.tab:checked+&]:block order-1 w-full bg-base-100 border-base-300 p-4">
+            <form action="{{ path('app_book_search_by_categories') }}" method="get" class="join w-full">
+                <input type="text" name="categoryName" value="{{ current_category }}" placeholder="Nom de la catégorie" class="input input-bordered join-item w-full">
+                <button type="submit" class="btn btn-primary join-item w-32">Chercher</button>
+            </form>
+        </div>
+    </div>
+
+    {% if is_filtered %}
+        <div class="mb-4">
+            <a href="{{ path('app_book_all') }}" class="btn btn-ghost btn-sm">&larr; Afficher tous les livres</a>
+        </div>
     {% endif %}
 
-    <div class="overflow-x-auto rounded-box border border-base-300">
-        <table class="table table-zebra">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Titre</th>
-                    <th>Auteur</th>
-                    <th>Catégories</th>
-                    <th>Loué par</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for book in books %}
+    {% if books is empty %}
+        <twig:Alert message="Aucun livre trouvé." />
+    {% else %}
+        <div class="overflow-x-auto rounded-box border border-base-300">
+            <table class="table table-zebra">
+                <thead>
                     <tr>
-                        <td>{{ book.id }}</td>
-                        <td><a href="{{ path('app_book_detail', {id: book.id}) }}" class="link link-primary">{{ book.title }}</a></td>
-                        <td>{{ book.author }}</td>
-                        <td>
-                            <div class="flex flex-wrap gap-1">
-                                {% for category in book.categories %}
-                                    <a href="{{ path('app_category_show', {id: category.id}) }}" class="badge badge-outline">{{ category.name }}</a>
-                                {% else %}
-                                    <span class="opacity-50">Aucune</span>
-                                {% endfor %}
-                            </div>
-                        </td>
-                        <td>
-                            {% if book.user %}
-                                <a href="{{ path('app_user_show', {id: book.user.id}) }}" class="link link-hover">{{ book.user.firstname ~ ' ' ~ book.user.lastname }}</a>
-                            {% else %}
-                                <span class="opacity-50">Disponible</span>
-                            {% endif %}
-                        </td>
+                        <th>Id</th>
+                        <th>Titre</th>
+                        <th>Auteur</th>
+                        <th>Publié le</th>
+                        <th>Catégories</th>
+                        <th>Loué par</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                    {% for book in books %}
+                        <tr class="hover:bg-base-300">
+                            <td class="opacity-60">{{ book.id }}</td>
+                            <td class="font-medium">
+                                <a href="{{ path('app_book_detail', {id: book.id}) }}" class="link link-primary">{{ book.title }}</a>
+                            </td>
+                            <td>{{ book.author }}</td>
+                            <td class="whitespace-nowrap">{{ book.publishAt|date('d/m/Y') }}</td>
+                            <td>
+                                <div class="flex flex-wrap gap-1">
+                                    {% for category in book.categories %}
+                                        <a href="{{ path('app_category_show', {id: category.id}) }}" class="badge badge-outline">{{ category.name }}</a>
+                                    {% else %}
+                                        <span class="opacity-50">Aucune</span>
+                                    {% endfor %}
+                                </div>
+                            </td>
+                            <td>
+                                {% if book.user %}
+                                    <a href="{{ path('app_user_show', {id: book.user.id}) }}" class="link link-hover">{{ book.user.firstname ~ ' ' ~ book.user.lastname }}</a>
+                                {% else %}
+                                    <span class="badge badge-success badge-soft">Disponible</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
 </div>
