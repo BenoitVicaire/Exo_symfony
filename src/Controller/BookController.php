@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Service\BookService;
 use DateTimeImmutable;
+use phpDocumentor\Reflection\Types\This;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpKernel\Attribute\MapDateTime;
 
@@ -61,12 +62,20 @@ final class BookController extends AbstractController
 	}
 
 	// Book by categories
-
 	#[Route('/books/search_by_categories', name:'app_book_search_by_categories')]
 	public function searchBookByCategories(#[MapQueryParameter] string $categoryName): Response
 	{
 		return $this->render('book/index.html.twig', [
 			'books' => $this->bookService->getBookByCategories($categoryName)
+		]);
+	}
+
+	// Book List au format DTO
+	#[Route('/books/list', name:'app_book_list')]
+	public function listBook():Response
+	{
+		return $this->render('book/list_dto.html.twig', [
+			'books' => $this->bookService->getBookListDtos()
 		]);
 	}
 }

@@ -37,4 +37,22 @@ final class CheatSheetController extends AbstractController
     {
         return $this->render('cheatsheet/tailwind.html.twig');
     }
+
+    #[Route('/cheatsheet/composants', name: 'app_cheatsheet_components')]
+    public function components(): Response
+    {
+        return $this->render('cheatsheet/components.html.twig');
+    }
+
+    #[Route('/cheatsheet/query-builder', name: 'app_cheatsheet_querybuilder')]
+    public function queryBuilder(): Response
+    {
+        return $this->render('cheatsheet/querybuilder.html.twig');
+    }
+
+    #[Route('/cheatsheet/parametres', name: 'app_cheatsheet_params')]
+    public function params(): Response
+    {
+        return $this->render('cheatsheet/params.html.twig');
+    }
 }
