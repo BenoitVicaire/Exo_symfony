@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détail de {{ book.title }}{% endblock %}
+
+{% block body %}
+<div class="mx-auto max-w-2xl px-4 py-8">
+    <a href="{{ path('app_book_list') }}" class="link link-hover text-sm">&larr; Retour à la liste</a>
+
+    <div class="card bg-base-200 shadow-sm mt-4">
+        <div class="card-body">
+            <h1 class="card-title text-3xl">{{ book.title }}</h1>
+            <p class="opacity-70">
+                Auteur : {{ book.author }}
+                &middot; Publié le {{ book.publishAt|date('d/m/Y') }}
+                &middot; Réf. {{ book.id }}
+            </p>
+
+            <div class="mt-2">
+                <h2 class="font-semibold mb-1">Catégories</h2>
+                <div class="flex flex-wrap gap-2">
+                    {% for category in book.categories %}
+                        <span class="badge badge-primary badge-outline">{{ category.name }}</span>
+                    {% else %}
+                        <span class="opacity-50">Aucune catégorie</span>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="mt-2">
+                <h2 class="font-semibold mb-1">Loué par</h2>
+                {% if book.userEmail %}
+                    <span>{{ book.userEmail }}</span>
+                {% else %}
+                    <span class="badge badge-success">Disponible</span>
+                {% endif %}
+            </div>
+
+            <h2 class="font-semibold mt-4">Résumé</h2>
+            <p>{{ book.resume }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

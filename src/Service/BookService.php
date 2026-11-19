@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Repository\BookRepository;
 use App\Entity\Book;
 use App\Dto\BookListDto;
+use App\Dto\BookDetailDto;
 use Doctrine\DBAL\Types\DateImmutableType;
 
 class BookService
@@ -55,5 +56,13 @@ class BookService
 		$books = $this->book_repository->findAll();
 
 		return array_map(BookListDto::fromEntity(...), $books);
+	
+		}
+	
+	public function getBookDetailDto(int $id): ?BookDetailDto
+	{
+		$book = $this->book_repository->find($id);
+
+		return $book ? BookDetailDto::fromEntity($book) : null;
 	}
 }

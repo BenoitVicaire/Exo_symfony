@@ -70,12 +70,26 @@ final class BookController extends AbstractController
 		]);
 	}
 
-	// Book List au format DTO
+	// Book List au format BookListDto
 	#[Route('/books/list', name:'app_book_list')]
 	public function listBook():Response
 	{
 		return $this->render('book/list_dto.html.twig', [
 			'books' => $this->bookService->getBookListDtos()
+		]);
+	}
+
+	// Book Detail au format BookDetailDto
+	#[Route('/books/{id}', name:'app_book_detailID', requirements: ['id' => '\d+'])]
+	public function detailBook(int $id):Response
+	{
+		$book = $this->bookService->getBookDetailDto($id);
+		if ($book === null){
+			throw $this->createNotFoundException('Livre introuvable');
+		}
+
+		return $this->render('book/detail_dto.html.twig', [
+			'book' => $book,
 		]);
 	}
 }
