@@ -4,10 +4,14 @@ namespace App\Service;
 
 use App\Entity\Category;
 use App\Repository\CategoryRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use phpDocumentor\Reflection\Types\This;
 
 class CategoryService
 {
-    public function __construct(private CategoryRepository $categoryRepository)
+    public function __construct(
+		private CategoryRepository $categoryRepository, 
+		private EntityManagerInterface $em)
     {
     }
 
@@ -23,4 +27,11 @@ class CategoryService
     {
         return $this->categoryRepository->find($id);
     }
+
+	public function saveCategory(Category $category) : void
+	{
+		$this->em->persist($category);
+        $this->em->flush();
+	}
+
 }

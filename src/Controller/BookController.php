@@ -105,8 +105,7 @@ final class BookController extends AbstractController
 		$form->handleRequest($request);
 
 		if ($form->isSubmitted() && $form->isValid()){
-			$em->persist($book);
-			$em->flush();
+			$this->bookService->saveBook($book);
 
 			return $this->redirectToRoute('app_book_all');
 		}

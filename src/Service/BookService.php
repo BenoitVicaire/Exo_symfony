@@ -5,12 +5,15 @@ namespace App\Service;
 use App\Repository\BookRepository;
 use App\Entity\Book;
 use App\Dto\BookListDto;
+use Doctrine\ORM\EntityManagerInterface;
 use App\Dto\BookDetailDto;
 use Doctrine\DBAL\Types\DateImmutableType;
 
 class BookService
 {
-	public function __construct(private BookRepository $book_repository) {}
+	public function __construct(
+		private BookRepository $book_repository,
+		private EntityManagerInterface $em) {}
 
 	/**
 	 * @return Book[]
@@ -64,5 +67,11 @@ class BookService
 		$book = $this->book_repository->find($id);
 
 		return $book ? BookDetailDto::fromEntity($book) : null;
+	}
+
+	public function saveBook(Book $book) : void
+	{
+		$this->em->persist($book);
+        $this->em->flush();
 	}
 }

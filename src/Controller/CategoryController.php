@@ -50,14 +50,42 @@ final class CategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em->persist($category);
-            $em->flush();
+            $this->categoryService->saveCategory($category);
+
+			$this->addFlash('success', 'Catégorie ' . $category->getName() . ' enregistrée');
 
             return $this->redirectToRoute('app_categories');
         }
 
-        return $this->render('category/new.html.twig', [
+        return $this->render('category/category_form.html.twig', [
             'form' => $form,
         ]);
     }
+
+	#[IsGranted('ROLE_USER', message : 'Vous \etes pas autorisé')]
+	#[Route('/category/{id}/edit', name :'app_category_edit', requirements: ['id' => '\d+']) ]
+	public function editCategory(Request $request, EntityManagerInterface $em, int $id):Response
+	{
+		$category = $this->categoryService->getCategoryById($id);
+		if ($category === null) {
+            throw $this->createNotFoundException('Catégorie introuvable');
+        }
+		
+
+        $form = $this->createForm(CategoryType::class, $category);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+			$this->categoryService->saveCategory($category);
+
+			$this->addFlash('success', 'Modification de ' . $category->getName() . ' enregistrée');
+
+            return $this->redirectToRoute('app_categories');
+        }
+
+		return $this->render('category/category_form.html.twig', [
+			'form' => $form,
+			'category' => $category
+		]);
+	}
 }

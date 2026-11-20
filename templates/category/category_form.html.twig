@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nouvelle catégorie{% endblock %}
+{% block title %}{{ category is defined ? 'Modifier la catégorie' : 'Nouvelle catégorie'}}{% endblock %}
 
 {% block body %}
 <div class="mx-auto max-w-md px-4 py-8">
@@ -8,7 +8,7 @@
 
     <div class="card bg-base-200 shadow-sm mt-4">
         <div class="card-body">
-            <h1 class="card-title text-2xl">Nouvelle catégorie</h1>
+            <h1 class="card-title text-2xl">{{ category is defined ? 'Modifier la catégorie' : 'Nouvelle catégorie'}}</h1>
 
             {# Le thème daisyUI (config/packages/twig.yaml) stylise label et erreurs #}
             {{ form_start(form, {attr: {class: 'mt-2'}}) }}
