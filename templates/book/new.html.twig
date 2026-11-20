@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau livre{% endblock %}
+
+{% block body %}
+<div class="mx-auto max-w-2xl px-4 py-8">
+    <a href="{{ path('app_book_all') }}" class="link link-hover text-sm">&larr; Retour aux livres</a>
+
+    <div class="card bg-base-200 shadow-sm mt-4">
+        <div class="card-body">
+            <h1 class="card-title text-2xl">Nouveau livre</h1>
+
+            {# Le thème daisyUI (config/packages/twig.yaml) stylise label, erreurs et cases à cocher #}
+            {{ form_start(form, {attr: {class: 'mt-2'}}) }}
+                {{ form_row(form.title, {attr: {class: 'input w-full'}}) }}
+                {{ form_row(form.author, {attr: {class: 'input w-full'}}) }}
+                {{ form_row(form.publishAt, {attr: {class: 'input w-full'}}) }}
+                {{ form_row(form.resume, {attr: {class: 'w-full', rows: 5}}) }}
+
+                {# Catégories : badges cliquables côte à côte, retour à la ligne automatique #}
+                <div class="flex flex-col mb-6">
+                    {{ form_label(form.categories) }}
+                    <div class="flex flex-wrap gap-2 mt-2">
+                        {% for choice in form.categories %}
+                            <label for="{{ choice.vars.id }}" class="cursor-pointer">
+                                {# La case est masquée mais reste cochable (clavier compris) : le badge réagit à son état #}
+                                {{ form_widget(choice, {attr: {class: 'peer sr-only'}}) }}
+                                <span class="badge badge-lg border-base-content/30 bg-base-100 select-none hover:border-primary peer-checked:border-primary peer-checked:bg-primary peer-checked:text-primary-content peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-primary">
+                                    {{ choice.vars.label }}
+                                </span>
+                            </label>
+                        {% endfor %}
+                    </div>
+                    {{ form_errors(form.categories) }}
+                </div>
+
+                {{ form_row(form.user, {attr: {class: 'w-full'}}) }}
+
+                <button type="submit" class="btn btn-primary w-full">Enregistrer</button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

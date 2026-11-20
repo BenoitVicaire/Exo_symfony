@@ -3,4 +3,7 @@
 @source not "./daisyui{,*}.mjs";
 @plugin "./daisyui.mjs";
 
+/* Tailwind doit voir les classes utilisées par le thème de formulaire daisyUI (dans vendor/) */
+@source "../../vendor/symfony/twig-bridge/Resources/views/Form/daisyui_5_layout.html.twig";
+
 

@@ -3,11 +3,18 @@
 {% block title %}CheatSheet : paramètres de requête{% endblock %}
 
 {% block sheet %}
-{% verbatim %}
+{% set steps = {
+    choisir: 'Choisir : chemin ou query string',
+    attribut: 'Lire un paramètre avec MapQueryParameter',
+    formulaire: 'Écrire le formulaire GET',
+    chemin: 'Paramètre de chemin et conversions',
+} %}
+
 <h1 class="text-3xl font-bold mb-6">Paramètres de requête</h1>
 
-<section class="mb-8">
-    <h2 class="text-xl font-bold mb-2">Deux endroits pour une valeur dans l'URL</h2>
+<twig:CheatSteps title="Pour récupérer une valeur de l'URL :" :steps="steps" />
+
+<twig:CheatStep :steps="steps" step="choisir">
     <div class="overflow-x-auto rounded-box border border-base-300">
         <table class="table">
             <thead><tr><th></th><th>Paramètre de chemin</th><th>Paramètre de query string</th></tr></thead>
@@ -20,10 +27,9 @@
             </tbody>
         </table>
     </div>
-</section>
+</twig:CheatStep>
 
-<section class="mb-8">
-    <h2 class="text-xl font-bold mb-2">#[MapQueryParameter]</h2>
+<twig:CheatStep :steps="steps" step="attribut">
 <pre class="bg-base-300 rounded-box p-4 text-sm overflow-x-auto"><code>use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 
 #[Route('/books/search', name: 'app_book_search')]
@@ -38,11 +44,12 @@ public function search(#[MapQueryParameter] string $title = ''): Response
         <li>Le <strong>nom de l'argument</strong> doit être le nom du paramètre dans l'URL. Pour un nom différent : <code>#[MapQueryParameter('book_title')] string $title</code>.</li>
         <li>Le type est contrôlé et converti : <code>int</code>, <code>float</code>, <code>bool</code>, <code>string</code>, <code>array</code>, enum.</li>
         <li>Valeur invalide pour le type (<code>?page=abc</code> pour un <code>int</code>) : réponse 404.</li>
+        <li>Un tableau (<code>array $cats</code>) demande <code>?cats[]=a&amp;cats[]=b</code> : le champ doit s'appeler <code>cats[]</code>.</li>
     </ul>
-</section>
+</twig:CheatStep>
 
-<section class="mb-8">
-    <h2 class="text-xl font-bold mb-2">Le formulaire qui va avec</h2>
+<twig:CheatStep :steps="steps" step="formulaire">
+{% verbatim %}
 <pre class="bg-base-300 rounded-box p-4 text-sm overflow-x-auto"><code>&lt;form action="{{ path('app_book_search') }}" method="get"&gt;
     &lt;input type="text" name="title"&gt;     {# name = nom du paramètre #}
     &lt;button type="submit"&gt;Chercher&lt;/button&gt;
@@ -52,10 +59,10 @@ public function search(#[MapQueryParameter] string $title = ''): Response
         <li><code>path('app_book_search')</code> sans paramètre : ne fonctionne que si la route n'a pas de <code>{title}</code> dans son chemin.</li>
         <li>Tester dans le navigateur : regarder l'URL après l'envoi (<code>?title=...</code>).</li>
     </ul>
-</section>
+{% endverbatim %}
+</twig:CheatStep>
 
-<section class="mb-8">
-    <h2 class="text-xl font-bold mb-2">Paramètre de chemin et conversions</h2>
+<twig:CheatStep :steps="steps" step="chemin">
 <pre class="bg-base-300 rounded-box p-4 text-sm overflow-x-auto"><code>#[Route('/user/{id}', name: 'app_user_show', requirements: ['id' =&gt; '\d+'])]
 public function show(int $id): Response { ... }
 
@@ -69,7 +76,7 @@ public function after(#[MapDateTime(format: 'Y-m-d')] \DateTimeImmutable $date):
         <li>Format de date : celui de PHP, <code>Y-m-d</code> (pas <code>yyyy-mm-dd</code>). <code>Y</code> année, <code>m</code> mois, <code>d</code> jour.</li>
         <li>Pour une date reçue par query string : <code>#[MapQueryParameter] string $date</code> puis <code>\DateTimeImmutable::createFromFormat('Y-m-d', $date)</code>. Cette méthode renvoie <code>false</code> si le format est faux.</li>
     </ul>
-</section>
+</twig:CheatStep>
 
 <section class="mb-8">
     <h2 class="text-xl font-bold mb-2">Pour aller plus loin</h2>
@@ -87,5 +94,4 @@ public function after(#[MapDateTime(format: 'Y-m-d')] \DateTimeImmutable $date):
         <li>404 sur la recherche : paramètre obligatoire absent, ou valeur du mauvais type.</li>
     </ul>
 </section>
-{% endverbatim %}
 {% endblock %}

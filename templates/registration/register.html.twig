@@ -1,0 +1,24 @@
+{% extends 'security/auth_layout.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block auth_form %}
+    {# Erreurs globales du formulaire #}
+    {% for error in registrationForm.vars.errors %}
+        <twig:Alert type="error" :message="error.message" class="mb-4" />
+    {% endfor %}
+
+    {# Le thème daisyUI (config/packages/twig.yaml) stylise label, input, erreurs et checkbox #}
+    {{ form_start(registrationForm) }}
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
+            {{ form_row(registrationForm.firstname, {attr: {class: 'input w-full'}}) }}
+            {{ form_row(registrationForm.lastname, {attr: {class: 'input w-full'}}) }}
+        </div>
+
+        {{ form_row(registrationForm.email, {attr: {class: 'input w-full'}}) }}
+        {{ form_row(registrationForm.plainPassword, {attr: {class: 'input w-full'}}) }}
+        {{ form_row(registrationForm.agreeTerms, {widget_class: 'checkbox checkbox-primary'}) }}
+
+        <button type="submit" class="btn btn-primary w-full">S'inscrire</button>
+    {{ form_end(registrationForm) }}
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle catégorie{% endblock %}
+
+{% block body %}
+<div class="mx-auto max-w-md px-4 py-8">
+    <a href="{{ path('app_categories') }}" class="link link-hover text-sm">&larr; Retour aux catégories</a>
+
+    <div class="card bg-base-200 shadow-sm mt-4">
+        <div class="card-body">
+            <h1 class="card-title text-2xl">Nouvelle catégorie</h1>
+
+            {# Le thème daisyUI (config/packages/twig.yaml) stylise label et erreurs #}
+            {{ form_start(form, {attr: {class: 'mt-2'}}) }}
+                {{ form_row(form.name, {attr: {class: 'input w-full'}}) }}
+
+                <button type="submit" class="btn btn-primary w-full">Enregistrer</button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -3,15 +3,18 @@
 namespace App\Controller;
 
 use App\Entity\Book;
+use App\Form\BookType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Service\BookService;
 use DateTimeImmutable;
+use Doctrine\ORM\EntityManagerInterface;
 use phpDocumentor\Reflection\Types\This;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpKernel\Attribute\MapDateTime;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class BookController extends AbstractController
 {
@@ -92,4 +95,24 @@ final class BookController extends AbstractController
 			'book' => $book,
 		]);
 	}
+
+	#[IsGranted('ROLE_USER', message:'Vous n\'etes pas autorisé')]
+	#[Route('/books/new', name:'app_book_new')]
+	public function newBook(Request $request, EntityManagerInterface $em):Response
+	{
+		$book = new Book();
+		$form = $this->createForm(BookType::class, $book);
+		$form->handleRequest($request);
+
+		if ($form->isSubmitted() && $form->isValid()){
+			$em->persist($book);
+			$em->flush();
+
+			return $this->redirectToRoute('app_book_all');
+		}
+		return $this->render('book/new.html.twig', [
+			'form' => $form
+		]);
+	}
+
 }

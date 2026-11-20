@@ -10,17 +10,19 @@
         'Utilisateurs': 'app_users',
         'Livres': 'app_book_all',
         'Catégories': 'app_categories',
-		'Liste' : 'app_book_list'
+		'Liste' : 'app_book_list',
     },
     'CheatSheet': {
         'Index': 'app_cheatsheet',
         'Mise en place': 'app_cheatsheet_setup',
         'Controller': 'app_cheatsheet_controller',
         'Entity': 'app_cheatsheet_entity',
-        'Tailwind': 'app_cheatsheet_tailwind',
+        'CSS (daisyUI)': 'app_cheatsheet_tailwind',
         'Composants': 'app_cheatsheet_components',
         'QueryBuilder': 'app_cheatsheet_querybuilder',
         'Paramètres': 'app_cheatsheet_params',
+        'Formulaires': 'app_cheatsheet_forms',
+        'Authentification': 'app_cheatsheet_auth',
     },
 } %}
 
@@ -52,11 +54,11 @@
     </div>
 
     {# Menus déroulants sur grand écran #}
-    <nav class="navbar-center hidden md:flex">
+    <nav class="navbar-center hidden md:flex" data-controller="navbar" data-action="keydown.esc@window->navbar#closeAll">
         <ul class="menu menu-horizontal px-1">
             {% for menu_label, links in menus %}
                 <li>
-                    <details>
+                    <details data-navbar-target="menu" data-action="toggle->navbar#closeOthers">
                         <summary>{{ menu_label }}</summary>
                         <ul class="bg-base-100 rounded-t-none p-2 w-48 z-10 shadow">
                             {% for label, route in links %}
@@ -72,7 +74,15 @@
     </nav>
 
     {# Bascule clair / sombre #}
-    <div class="navbar-end">
+    <div class="navbar-end gap-2">
+        {# Connexion / inscription (une seule page à onglets) ou déconnexion #}
+        {% if app.user %}
+            <span class="hidden sm:inline text-sm opacity-70">{{ app.user.firstname }}</span>
+            <a href="{{ logout_path() }}" class="btn btn-ghost btn-sm">Déconnexion</a>
+        {% else %}
+            <a href="{{ path('app_login') }}" class="btn btn-primary btn-sm">Connexion</a>
+        {% endif %}
+
         <label class="swap swap-rotate btn btn-ghost btn-circle" aria-label="Basculer entre thème clair et sombre">
             <input type="checkbox" id="theme-toggle">
             {# Soleil : visible quand le thème est clair (clic = passer en sombre) #}

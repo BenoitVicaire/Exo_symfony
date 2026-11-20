@@ -55,4 +55,16 @@ final class CheatSheetController extends AbstractController
     {
         return $this->render('cheatsheet/params.html.twig');
     }
+
+    #[Route('/cheatsheet/formulaires', name: 'app_cheatsheet_forms')]
+    public function forms(): Response
+    {
+        return $this->render('cheatsheet/forms.html.twig');
+    }
+
+    #[Route('/cheatsheet/authentification', name: 'app_cheatsheet_auth')]
+    public function auth(): Response
+    {
+        return $this->render('cheatsheet/auth.html.twig');
+    }
 }

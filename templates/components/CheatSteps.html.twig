@@ -1,0 +1,19 @@
+{# Todolist d'une cheatsheet : "Pour mettre en place X : étape 1, 2, 3..." #}
+{# Chaque titre est un lien vers la section <twig:CheatStep> du même identifiant. #}
+{% props title, steps %}
+
+<div id="etapes" class="card bg-base-200 mb-8 scroll-mt-4">
+    <div class="card-body">
+        <h2 class="card-title">{{ title }}</h2>
+        <ul class="list bg-base-100 rounded-box">
+            {% for key, label in steps %}
+                <li class="list-row items-center">
+                    <input type="checkbox" class="checkbox checkbox-primary checkbox-sm peer" aria-label="Étape {{ loop.index }} faite">
+                    <a href="#{{ key }}" class="link link-hover peer-checked:line-through peer-checked:opacity-50">
+                        <span class="font-semibold">Étape {{ loop.index }}</span> : {{ label }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>

@@ -3,17 +3,23 @@
 {% block title %}CheatSheet : QueryBuilder{% endblock %}
 
 {% block sheet %}
-{% verbatim %}
+{% set steps = {
+    ou: "Savoir où écrire la requête",
+    requete: 'Construire la requête',
+    resultat: 'Choisir le type de résultat',
+    brancher: 'Brancher service et contrôleur',
+} %}
+
 <h1 class="text-3xl font-bold mb-6">QueryBuilder (Doctrine)</h1>
 
-<section class="mb-8">
-    <h2 class="text-xl font-bold mb-2">Où l'écrire</h2>
+<twig:CheatSteps title="Pour écrire une recherche en base :" :steps="steps" />
+
+<twig:CheatStep :steps="steps" step="ou">
     <p>Dans le <strong>repository</strong> de l'entité (<code>src/Repository/BookRepository.php</code>). Le service l'appelle, le contrôleur appelle le service :</p>
 <pre class="bg-base-300 rounded-box p-4 text-sm overflow-x-auto mt-2"><code>Controller  →  Service  →  Repository (QueryBuilder)  →  base de données</code></pre>
-</section>
+</twig:CheatStep>
 
-<section class="mb-8">
-    <h2 class="text-xl font-bold mb-2">L'ordre de la chaîne</h2>
+<twig:CheatStep :steps="steps" step="requete">
 <pre class="bg-base-300 rounded-box p-4 text-sm overflow-x-auto"><code>/** @return Book[] */
 public function findByTitle(string $title): array
 {
@@ -24,11 +30,9 @@ public function findByTitle(string $title): array
         -&gt;getQuery()                               // 5. construire la requête
         -&gt;getResult();                             // 6. exécuter
 }</code></pre>
-    <p class="mt-2">Tout ce qui modifie la requête se place <strong>avant</strong> <code>getQuery()</code>. Après, on n'a plus un QueryBuilder mais un résultat.</p>
-</section>
+    <p class="mt-2 mb-3">Tout ce qui modifie la requête se place <strong>avant</strong> <code>getQuery()</code>. Après, on n'a plus un QueryBuilder mais un résultat.</p>
 
-<section class="mb-8">
-    <h2 class="text-xl font-bold mb-2">Les méthodes courantes</h2>
+    <h3 class="font-semibold mb-2">Les méthodes courantes</h3>
     <div class="overflow-x-auto rounded-box border border-base-300">
         <table class="table">
             <thead><tr><th>Méthode</th><th>Rôle</th></tr></thead>
@@ -45,10 +49,8 @@ public function findByTitle(string $title): array
             </tbody>
         </table>
     </div>
-</section>
 
-<section class="mb-8">
-    <h2 class="text-xl font-bold mb-2">Opérateurs dans un where</h2>
+    <h3 class="font-semibold mt-5 mb-2">Opérateurs dans un where</h3>
 <pre class="bg-base-300 rounded-box p-4 text-sm overflow-x-auto"><code>b.title = :title          // valeur exacte
 b.title LIKE :title       // motif : % remplace n'importe quels caractères
 b.publishAt &gt; :date       // &gt;, &gt;=, &lt;, &lt;=
@@ -58,10 +60,9 @@ b.id IN (:ids)            // dans une liste</code></pre>
 <pre class="bg-base-300 rounded-box p-4 text-sm overflow-x-auto mt-2"><code>-&gt;andWhere('b.title LIKE :title')
 -&gt;setParameter('title', '%' . $title . '%')   // contient
 // 'abc%' commence par, '%abc' finit par</code></pre>
-</section>
+</twig:CheatStep>
 
-<section class="mb-8">
-    <h2 class="text-xl font-bold mb-2">Récupérer le résultat</h2>
+<twig:CheatStep :steps="steps" step="resultat">
     <div class="overflow-x-auto rounded-box border border-base-300">
         <table class="table">
             <thead><tr><th>Méthode</th><th>Renvoie</th></tr></thead>
@@ -76,7 +77,25 @@ b.id IN (:ids)            // dans une liste</code></pre>
     -&gt;select('COUNT(b.id)')
     -&gt;getQuery()
     -&gt;getSingleScalarResult();</code></pre>
-</section>
+</twig:CheatStep>
+
+<twig:CheatStep :steps="steps" step="brancher">
+<pre class="bg-base-300 rounded-box p-4 text-sm overflow-x-auto"><code>// Service : une méthode par recherche
+public function getBookByTitle(string $title): array
+{
+    return $this-&gt;bookRepository-&gt;findByTitle($title);
+}
+
+// Contrôleur
+#[Route('/books/search', name: 'app_book_search')]
+public function search(#[MapQueryParameter] string $title = ''): Response
+{
+    return $this-&gt;render('book/index.html.twig', [
+        'books' =&gt; $this-&gt;bookService-&gt;getBookByTitle($title),
+    ]);
+}</code></pre>
+    <p class="mt-2">Lecture du paramètre d'URL : cheatsheet « Paramètres ».</p>
+</twig:CheatStep>
 
 <section class="mb-8">
     <h2 class="text-xl font-bold mb-2">Exemples du projet</h2>
@@ -118,5 +137,4 @@ public function findByCategory(string $categoryName): array
         <li>Concaténer la valeur dans la requête : toujours passer par <code>setParameter</code> (sécurité contre l'injection SQL).</li>
     </ul>
 </section>
-{% endverbatim %}
 {% endblock %}

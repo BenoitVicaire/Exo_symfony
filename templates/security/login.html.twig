@@ -1,0 +1,33 @@
+{% extends 'security/auth_layout.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block auth_form %}
+    {% if error %}
+        <twig:Alert type="error" :message="error.messageKey|trans(error.messageData, 'security')" class="mb-4" />
+    {% endif %}
+
+    {% if app.user %}
+        <twig:Alert type="info" :message="'Connecté en tant que ' ~ app.user.userIdentifier" class="mb-4" />
+        <a href="{{ logout_path() }}" class="btn btn-outline w-full">Déconnexion</a>
+    {% else %}
+        <form method="post">
+            <div class="flex flex-col mb-6">
+                <label for="username" class="label">Adresse email</label>
+                <input type="email" value="{{ last_username }}" name="_username" id="username"
+                       class="input w-full mt-2" placeholder="jean.dupont@exemple.fr"
+                       autocomplete="email" required autofocus>
+            </div>
+
+            <div class="flex flex-col mb-6">
+                <label for="password" class="label">Mot de passe</label>
+                <input type="password" name="_password" id="password"
+                       class="input w-full mt-2" autocomplete="current-password" required>
+            </div>
+
+            <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
+
+            <button class="btn btn-primary w-full" type="submit">Se connecter</button>
+        </form>
+    {% endif %}
+{% endblock %}

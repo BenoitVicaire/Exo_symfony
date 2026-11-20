@@ -3,17 +3,32 @@
 {% block title %}CheatSheet : controller{% endblock %}
 
 {% block sheet %}
-{% verbatim %}
+{% set steps = {
+    creer: 'Créer le contrôleur',
+    route: 'Déclarer la route',
+    params: 'Récupérer les paramètres',
+    template: 'Écrire le template Twig',
+    verifier: 'Vérifier la route',
+} %}
+
 <h1 class="text-3xl font-bold mb-6">Controller</h1>
 
-<section class="mb-8">
-    <h2 class="text-xl font-bold mb-2">Créer un contrôleur</h2>
+<twig:CheatSteps title="Pour créer une page :" :steps="steps" />
+
+<twig:CheatStep :steps="steps" step="creer">
+{% verbatim %}
 <pre class="bg-base-300 rounded-box p-4 text-sm overflow-x-auto"><code>php bin/console make:controller NomController</code></pre>
     <p class="mt-2">Crée <code>src/Controller/NomController.php</code> et <code>templates/nom/index.html.twig</code>.</p>
-</section>
+    <p class="mt-2 mb-2">Pour utiliser un service (repository, service métier), l'injecter dans le constructeur :</p>
+<pre class="bg-base-300 rounded-box p-4 text-sm overflow-x-auto"><code>public function __construct(private UserService $userService)
+{
+}
+// puis : $this->userService->getUsers()</code></pre>
+{% endverbatim %}
+</twig:CheatStep>
 
-<section class="mb-8">
-    <h2 class="text-xl font-bold mb-2">Route avec attribut</h2>
+<twig:CheatStep :steps="steps" step="route">
+{% verbatim %}
 <pre class="bg-base-300 rounded-box p-4 text-sm overflow-x-auto"><code>namespace App\Controller;   // toujours App\Controller
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,24 +46,19 @@ final class ContactController extends AbstractController
     }
 }</code></pre>
     <p class="mt-2">Les clés du tableau deviennent les variables du template : <code>{{ email }}</code>.</p>
-</section>
-
-<section class="mb-8">
-    <h2 class="text-xl font-bold mb-2">Route en YAML</h2>
-    <p class="mb-2">Dans <code>config/routes.yaml</code>, sans attribut dans le contrôleur :</p>
+    <p class="mt-2 mb-2">Autre possibilité : la route en YAML, dans <code>config/routes.yaml</code>, sans attribut dans le contrôleur :</p>
 <pre class="bg-base-300 rounded-box p-4 text-sm overflow-x-auto"><code>app_home:
   path: /
   controller: App\Controller\HomeController::index</code></pre>
-</section>
+{% endverbatim %}
+</twig:CheatStep>
 
-<section class="mb-8">
-    <h2 class="text-xl font-bold mb-2">Paramètre dans l'URL</h2>
+<twig:CheatStep :steps="steps" step="params">
+{% verbatim %}
+    <p class="mb-2">Dans le chemin (<code>/livres/detail/3</code>) :</p>
 <pre class="bg-base-300 rounded-box p-4 text-sm overflow-x-auto"><code>#[Route('/livres/detail/{id}', name: 'app_book_detail', requirements: ['id' => '\d+'])]
 public function detail(int $id): Response</code></pre>
-</section>
-
-<section class="mb-8">
-    <h2 class="text-xl font-bold mb-2">Paramètre en query string (?nb1=3)</h2>
+    <p class="mt-3 mb-2">En query string (<code>?nb1=3</code>) :</p>
 <pre class="bg-base-300 rounded-box p-4 text-sm overflow-x-auto"><code>// Avec la requête
 public function index(Request $request): Response
 {
@@ -57,31 +67,16 @@ public function index(Request $request): Response
 
 // Avec l'attribut (le nom de la variable = le nom du paramètre)
 public function index(#[MapQueryParameter] int $nb1 = 0): Response</code></pre>
-</section>
-
-<section class="mb-8">
-    <h2 class="text-xl font-bold mb-2">Redirection et erreur 404</h2>
+    <p class="mt-3 mb-2">Redirection et erreur 404 :</p>
 <pre class="bg-base-300 rounded-box p-4 text-sm overflow-x-auto"><code>return $this->redirectToRoute('app_book_detail', ['id' => 3]);
 
 throw $this->createNotFoundException('Livre introuvable');</code></pre>
-</section>
+    <p class="mt-2">Détail des paramètres : cheatsheet « Paramètres ».</p>
+{% endverbatim %}
+</twig:CheatStep>
 
-<section class="mb-8">
-    <h2 class="text-xl font-bold mb-2">Injecter un service</h2>
-<pre class="bg-base-300 rounded-box p-4 text-sm overflow-x-auto"><code>public function __construct(private UserService $userService)
-{
-}
-// puis : $this->userService->getUsers()</code></pre>
-</section>
-
-<section class="mb-8">
-    <h2 class="text-xl font-bold mb-2">Vérifier les routes</h2>
-<pre class="bg-base-300 rounded-box p-4 text-sm overflow-x-auto"><code>php bin/console debug:router
-php bin/console debug:router app_contact</code></pre>
-</section>
-
-<section class="mb-8">
-    <h2 class="text-xl font-bold mb-2">Twig : l'essentiel</h2>
+<twig:CheatStep :steps="steps" step="template">
+{% verbatim %}
 <pre class="bg-base-300 rounded-box p-4 text-sm overflow-x-auto"><code>{% extends 'base.html.twig' %}
 
 {% block title %}Mon titre{% endblock %}
@@ -97,7 +92,15 @@ php bin/console debug:router app_contact</code></pre>
 
     {% if result is not null %}{{ result }}{% endif %}
 {% endblock %}</code></pre>
-</section>
+    <p class="mt-2">Toujours utiliser <code>path('nom_de_la_route')</code> plutôt qu'une URL écrite en dur.</p>
+{% endverbatim %}
+</twig:CheatStep>
+
+<twig:CheatStep :steps="steps" step="verifier">
+<pre class="bg-base-300 rounded-box p-4 text-sm overflow-x-auto"><code>php bin/console debug:router
+php bin/console debug:router app_contact</code></pre>
+    <p class="mt-2">Puis ouvrir l'URL dans le navigateur. En cas de souci : <code>var/log/dev.log</code> et <code>/_profiler</code>.</p>
+</twig:CheatStep>
 
 <section class="mb-8">
     <h2 class="text-xl font-bold mb-2">Erreurs fréquentes</h2>
@@ -109,5 +112,4 @@ php bin/console debug:router app_contact</code></pre>
         <li>Le <code>+</code> dans une URL doit être encodé <code>%2B</code>.</li>
     </ul>
 </section>
-{% endverbatim %}
 {% endblock %}

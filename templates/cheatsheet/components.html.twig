@@ -3,20 +3,25 @@
 {% block title %}CheatSheet : composants{% endblock %}
 
 {% block sheet %}
-{% verbatim %}
+{% set steps = {
+    installer: 'Installer le bundle',
+    choisir: 'Choisir : anonyme ou classe PHP',
+    ecrire: 'Écrire le composant',
+    appeler: 'Appeler le composant',
+    contenu: 'Passer du contenu imbriqué (facultatif)',
+} %}
+
 <h1 class="text-3xl font-bold mb-6">Composants Twig</h1>
 
-<section class="mb-8">
-    <h2 class="text-xl font-bold mb-2">Principe</h2>
-    <p class="mb-2">Un composant est un morceau d'interface réutilisable (card, alerte, badge) qu'on appelle avec une balise :</p>
-<pre class="bg-base-300 rounded-box p-4 text-sm overflow-x-auto"><code>composer require symfony/ux-twig-component
+<twig:CheatSteps title="Pour créer un composant réutilisable :" :steps="steps" />
 
-&lt;twig:Alert type="error" :message="error" /&gt;</code></pre>
-    <p class="mt-2">Le nom de la balise = le nom du fichier du composant, en <strong>PascalCase</strong> (<code>Alert.html.twig</code> donne <code>&lt;twig:Alert&gt;</code>). Aucun import n'est nécessaire.</p>
-</section>
+<twig:CheatStep :steps="steps" step="installer">
+<pre class="bg-base-300 rounded-box p-4 text-sm overflow-x-auto"><code>composer require symfony/ux-twig-component</code></pre>
+    <p class="mt-2">Un composant est un morceau d'interface réutilisable (card, alerte, badge) qu'on appelle avec une balise. Le nom de la balise = le nom du fichier du composant, en <strong>PascalCase</strong>. Aucun import n'est nécessaire.</p>
+</twig:CheatStep>
 
-<section class="mb-8">
-    <h2 class="text-xl font-bold mb-2">Deux sortes de composants</h2>
+<twig:CheatStep :steps="steps" step="choisir">
+{% verbatim %}
     <div class="overflow-x-auto rounded-box border border-base-300">
         <table class="table">
             <thead>
@@ -33,10 +38,12 @@
         </table>
     </div>
     <p class="mt-2">Règle : <strong>commencer par un composant anonyme</strong> et ne passer à une classe que si le template devient trop compliqué.</p>
-</section>
+{% endverbatim %}
+</twig:CheatStep>
 
-<section class="mb-8">
-    <h2 class="text-xl font-bold mb-2">Composant anonyme</h2>
+<twig:CheatStep :steps="steps" step="ecrire">
+{% verbatim %}
+    <h3 class="font-semibold mb-2">Composant anonyme</h3>
 <pre class="bg-base-300 rounded-box p-4 text-sm overflow-x-auto"><code>{# templates/components/Alert.html.twig #}
 {% props message, type = 'info' %}
 
@@ -54,10 +61,8 @@
         <li><code>type = 'info'</code> = facultatif, avec une valeur par défaut (les guillemets sont nécessaires).</li>
         <li><code>attributes</code> reçoit les attributs passés à l'appel (<code>class="mb-4"</code>) et les fusionne avec ceux du composant.</li>
     </ul>
-</section>
 
-<section class="mb-8">
-    <h2 class="text-xl font-bold mb-2">Composant avec classe PHP</h2>
+    <h3 class="font-semibold mt-5 mb-2">Composant avec classe PHP</h3>
 <pre class="bg-base-300 rounded-box p-4 text-sm overflow-x-auto"><code>// src/Twig/Components/Badge.php
 namespace App\Twig\Components;
 
@@ -89,10 +94,11 @@ class Badge
 <pre class="bg-base-300 rounded-box p-4 text-sm overflow-x-auto mt-2"><code>php bin/console make:twig-component Badge   # crée la classe ET le template
 php bin/console debug:twig-component         # liste les composants connus</code></pre>
     <p class="mt-2"><code>make:twig-component</code> génère toujours une classe. Pour un composant anonyme, créer seulement le fichier dans <code>templates/components/</code>.</p>
-</section>
+{% endverbatim %}
+</twig:CheatStep>
 
-<section class="mb-8">
-    <h2 class="text-xl font-bold mb-2">Appeler un composant</h2>
+<twig:CheatStep :steps="steps" step="appeler">
+{% verbatim %}
 <pre class="bg-base-300 rounded-box p-4 text-sm overflow-x-auto"><code>&lt;twig:Alert message="Texte fixe" /&gt;              {# chaîne de caractères #}
 &lt;twig:Alert :message="error" /&gt;                  {# ":" = expression Twig (variable) #}
 &lt;twig:Alert :message="'Résultat : ' ~ result" /&gt; {# expression complète #}
@@ -106,10 +112,11 @@ php bin/console debug:twig-component         # liste les composants connus</code
         <li>Pas d'espace autour du <code>=</code>, valeur toujours entre guillemets.</li>
         <li>Un composant ne voit <strong>pas</strong> les variables de la page : tout passe par les props.</li>
     </ul>
-</section>
+{% endverbatim %}
+</twig:CheatStep>
 
-<section class="mb-8">
-    <h2 class="text-xl font-bold mb-2">Contenu imbriqué (bloc)</h2>
+<twig:CheatStep :steps="steps" step="contenu">
+{% verbatim %}
 <pre class="bg-base-300 rounded-box p-4 text-sm overflow-x-auto"><code>{# templates/components/Card.html.twig #}
 &lt;div class="card bg-base-200"&gt;
     &lt;div class="card-body"&gt;{% block content %}{% endblock %}&lt;/div&gt;
@@ -119,18 +126,19 @@ php bin/console debug:twig-component         # liste les composants connus</code
 &lt;twig:Card&gt;
     &lt;p&gt;Ce texte arrive dans le bloc content.&lt;/p&gt;
 &lt;/twig:Card&gt;</code></pre>
-</section>
+    <p class="mt-2">Les cheatsheets de ce projet utilisent ce mécanisme : <code>&lt;twig:CheatStep&gt;</code> reçoit le contenu de chaque étape.</p>
+{% endverbatim %}
+</twig:CheatStep>
 
 <section class="mb-8">
     <h2 class="text-xl font-bold mb-2">Erreurs fréquentes</h2>
     <ul class="list-disc pl-6 space-y-1">
-        <li><code>Cannot define prop "label"... already defined in component class</code> : une classe PHP ET un <code>{% props %}</code> pour le même composant. Garder l'un des deux (supprimer la classe, ou la ligne <code>props</code>).</li>
+        <li><code>Cannot define prop "label"... already defined in component class</code> : une classe PHP ET un <code>props</code> pour le même composant. Garder l'un des deux (supprimer la classe, ou la ligne <code>props</code>).</li>
         <li><code>Expected attribute name</code> : syntaxe de balise invalide, par exemple <code>formation = formation</code> avec des espaces et sans guillemets.</li>
         <li>La prop arrive comme un texte au lieu d'un objet : le <code>:</code> manque devant le nom.</li>
         <li><code>Unknown component</code> : mauvais nom ou mauvais dossier, vider le cache.</li>
-        <li><code>badge-{{ variant }}</code> : Tailwind ne détecte pas une classe construite dynamiquement. Utiliser un tableau de correspondance avec les noms de classes complets.</li>
+        <li>Une classe Tailwind construite dynamiquement (<code>badge-</code> + variable) n'est pas détectée. Utiliser un tableau de correspondance avec les noms de classes complets.</li>
         <li>Une nouvelle classe Tailwind n'a aucun effet : relancer <code>tailwind:build</code>.</li>
     </ul>
 </section>
-{% endverbatim %}
 {% endblock %}
