@@ -96,7 +96,7 @@ final class BookController extends AbstractController
 		]);
 	}
 
-	#[IsGranted('ROLE_USER', message:'Vous n\'etes pas autorisé')]
+	#[IsGranted('ROLE_ADMIN', message:'Vous n\'etes pas autorisé')]
 	#[Route('/books/new', name:'app_book_new')]
 	public function newBook(Request $request, EntityManagerInterface $em):Response
 	{
