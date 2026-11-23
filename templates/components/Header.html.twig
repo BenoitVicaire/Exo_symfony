@@ -77,7 +77,8 @@
     <div class="navbar-end gap-2">
         {# Connexion / inscription (une seule page à onglets) ou déconnexion #}
         {% if app.user %}
-            <span class="hidden sm:inline text-sm opacity-70">{{ app.user.firstname }}</span>
+            
+			<a href="{{ path('app_user_show', {id: app.user.id}) }}" class="hidden sm:inline text-sm link link-hover"> {{ app.user.firstname }}</a>
             <a href="{{ logout_path() }}" class="btn btn-ghost btn-sm">Déconnexion</a>
         {% else %}
             <a href="{{ path('app_login') }}" class="btn btn-primary btn-sm">Connexion</a>

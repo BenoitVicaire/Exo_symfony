@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
+use App\Form\ProfileType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use App\Service\UserService;
 
 final class UserController extends AbstractController
@@ -59,6 +61,32 @@ final class UserController extends AbstractController
 			throw $this->createNotFoundException('Utilisateur introuvable');
 		}
 		return $this->render('user/show_user_id.html.twig', [
+			'user' => $user,
+		]);
+	}
+
+	#[IsGranted('ROLE_ADMIN', message : 'Vous \etes pas autorisé')]
+	#[Route('/user/{id}/edit', name:'app_user_edit', requirements:['id' => '\d+'])]
+	public function editUser(int $id, Request $request): Response
+	{
+		$user = $this->userService->getUserById($id);
+		if ($user === null){
+			throw $this->createNotFoundException('Utilisateur introuvable');
+		}
+
+		$form = $this->createForm(ProfileType::class, $user);
+		$form->handleRequest($request);
+
+		if($form->isSubmitted() && $form->isValid()){
+			$this->userService->saveProfil($user);
+
+			$this->addFlash('success', 'Modification de ' . $user->getFirstname() . " " . $user->getLastname() . " enregistrée");
+
+			return $this->redirectToRoute('app_users');
+		}
+
+		return $this->render('user/edit.html.twig', [
+			'form' => $form,
 			'user' => $user,
 		]);
 	}

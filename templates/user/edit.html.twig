@@ -1,0 +1,21 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Edit profile {% endblock %}
+
+{% block body %}
+
+<div class="mx-auto max-w-md px-4 py-8">
+    <a href="{{ path('app_users') }}" class="link link-hover text-sm">&larr; Retour a la liste des utilisateurs</a>
+
+    <div class="card bg-base-200 shadow-sm mt-4">
+        <div class="card-body">
+            <h1 class="card-title text-2xl">Modifier le profil</h1>
+			{{ form_start(form, {attr: {class: 'mt-2'}})}}
+			{{ form_row(form.firstname, {attr: {class: 'input w-full'}})}}
+			{{ form_row(form.lastname, {attr: {class: 'input w-full'}})}}
+			<button type="submit" class='btn btn-primary w-full'>Enregistrer</button>
+			{{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -34,4 +34,10 @@ class UserService
 		$this->em->persist($user);
         $this->em->flush();
 	}
+
+	public function saveProfil(User $user): void
+	{
+		$this->em->persist($user);
+        $this->em->flush();
+	}
 }
