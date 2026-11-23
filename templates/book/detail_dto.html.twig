@@ -37,6 +37,9 @@
 
             <h2 class="font-semibold mt-4">Résumé</h2>
             <p>{{ book.resume }}</p>
+			<div class="card-actions">
+				<a href="{{ path('app_book_edit', {id:book.id}) }}" class="btn btn-primary btn-sm">Edit</a>
+			</div>
         </div>
     </div>
 </div>

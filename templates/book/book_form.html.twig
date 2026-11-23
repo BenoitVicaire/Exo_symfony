@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nouveau livre{% endblock %}
+{% block title %}{{ book is defined ? 'Modifier le livre' : 'Nouveau livre' }}{% endblock %}
 
 {% block body %}
 <div class="mx-auto max-w-2xl px-4 py-8">
@@ -8,7 +8,7 @@
 
     <div class="card bg-base-200 shadow-sm mt-4">
         <div class="card-body">
-            <h1 class="card-title text-2xl">Nouveau livre</h1>
+            <h1 class="card-title text-2xl">{{ book is defined ? 'Modifier le livre' : 'Nouveau livre' }}</h1>
 
             {# Le thème daisyUI (config/packages/twig.yaml) stylise label, erreurs et cases à cocher #}
             {{ form_start(form, {attr: {class: 'mt-2'}}) }}

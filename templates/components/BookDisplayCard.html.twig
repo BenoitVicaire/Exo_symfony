@@ -67,7 +67,7 @@
                         <tr class="hover:bg-base-300">
                             <td class="opacity-60">{{ book.id }}</td>
                             <td class="font-medium">
-                                <a href="{{ path('app_book_detail', {id: book.id}) }}" class="link link-primary">{{ book.title }}</a>
+                                <a href="{{ path('app_book_detailID', {id: book.id}) }}" class="link link-primary">{{ book.title }}</a>
                             </td>
                             <td>{{ book.author }}</td>
                             <td class="whitespace-nowrap">{{ book.publishAt|date('d/m/Y') }}</td>

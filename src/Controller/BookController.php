@@ -109,8 +109,37 @@ final class BookController extends AbstractController
 
 			return $this->redirectToRoute('app_book_all');
 		}
-		return $this->render('book/new.html.twig', [
+		return $this->render('book/book_form.html.twig', [
 			'form' => $form
+		]);
+	}
+
+	#[IsGranted('ROLE_ADMIN', message:"Nous n'etes pas autorisé")]
+	#[Route('/books/{id}/edit', name:'app_book_edit', requirements: ['id' => '\d+'])]
+	public function editBook(Request $request, int $id):Response
+	{
+		$book = $this->bookService->getBookById($id);
+		if ($book === null){
+			throw $this->createNotFoundException('Livre introuvable');
+		}
+		if (!$this->isGranted('ROLE_ADMIN')){
+			throw $this->createAccessDeniedException("Nous n'êtes pas autorisé à modifier ce livre");
+		}
+
+		$form = $this->createForm(BookType::class, $book);
+		$form->handleRequest($request);
+
+		if ($form->isSubmitted() && $form->isValid()){
+			$this->bookService->saveBook($book);
+
+			$this->addFlash('success', 'Modification de ' . $book->getTitle() . ' enregistrée');
+
+			return $this->redirectToRoute('app_book_detailID', ['id' => $book->getId()]);
+		}
+
+		return $this->render('book/book_form.html.twig', [
+			'form' => $form,
+			'book' => $book
 		]);
 	}
 

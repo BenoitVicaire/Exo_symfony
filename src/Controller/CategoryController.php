@@ -64,7 +64,7 @@ final class CategoryController extends AbstractController
 
 	#[IsGranted('ROLE_USER', message : 'Vous \etes pas autorisé')]
 	#[Route('/category/{id}/edit', name :'app_category_edit', requirements: ['id' => '\d+']) ]
-	public function editCategory(Request $request, EntityManagerInterface $em, int $id):Response
+	public function editCategory(Request $request, int $id):Response
 	{
 		$category = $this->categoryService->getCategoryById($id);
 		if ($category === null) {
