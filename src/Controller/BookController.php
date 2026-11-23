@@ -9,12 +9,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Service\BookService;
-use DateTimeImmutable;
-use Doctrine\ORM\EntityManagerInterface;
-use phpDocumentor\Reflection\Types\This;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
-use Symfony\Component\HttpKernel\Attribute\MapDateTime;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
+use App\Security\Voter\BookVoter;
 
 final class BookController extends AbstractController
 {
@@ -96,11 +92,14 @@ final class BookController extends AbstractController
 		]);
 	}
 
-	#[IsGranted('ROLE_ADMIN', message:'Vous n\'etes pas autorisé')]
+	
 	#[Route('/books/new', name:'app_book_new')]
-	public function newBook(Request $request, EntityManagerInterface $em):Response
+	public function newBook(Request $request):Response
 	{
 		$book = new Book();
+
+		$this->denyAccessUnlessGranted(BookVoter::CREATE, $book, "Vous n'êtes pas autorisé à créer un livre");
+
 		$form = $this->createForm(BookType::class, $book);
 		$form->handleRequest($request);
 
@@ -114,7 +113,6 @@ final class BookController extends AbstractController
 		]);
 	}
 
-	#[IsGranted('ROLE_ADMIN', message:"Nous n'etes pas autorisé")]
 	#[Route('/books/{id}/edit', name:'app_book_edit', requirements: ['id' => '\d+'])]
 	public function editBook(Request $request, int $id):Response
 	{
@@ -122,9 +120,7 @@ final class BookController extends AbstractController
 		if ($book === null){
 			throw $this->createNotFoundException('Livre introuvable');
 		}
-		if (!$this->isGranted('ROLE_ADMIN')){
-			throw $this->createAccessDeniedException("Nous n'êtes pas autorisé à modifier ce livre");
-		}
+		$this->denyAccessUnlessGranted(BookVoter::EDIT, $book, "Vous n'êtes pas autorisé à modifier ce livre");
 
 		$form = $this->createForm(BookType::class, $book);
 		$form->handleRequest($request);
