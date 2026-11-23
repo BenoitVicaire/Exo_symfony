@@ -12,13 +12,14 @@ final class BookVoter extends Voter
 {
     public const EDIT = 'BOOK_EDIT';
     public const VIEW = 'BOOK_VIEW';
-	public const CREATE= 'BOOK_CREATE';
+	public const CREATE = 'BOOK_CREATE';
+	public const DELETE = 'BOOK_DELETE';
 
     protected function supports(string $attribute, mixed $subject): bool
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, [self::EDIT, self::VIEW, self::CREATE])
+        return in_array($attribute, [self::EDIT, self::VIEW, self::CREATE, self::DELETE])
             && $subject instanceof \App\Entity\Book;
     }
 	
@@ -46,6 +47,9 @@ final class BookVoter extends Voter
                 return true;
 
             case self::CREATE:
+                return in_array('ROLE_ADMIN', $user->getRoles(), true);
+
+            case self::DELETE:
                 return in_array('ROLE_ADMIN', $user->getRoles(), true);
         }
 

@@ -39,6 +39,13 @@
             <p>{{ book.resume }}</p>
 			<div class="card-actions">
 				<a href="{{ path('app_book_edit', {id:book.id}) }}" class="btn btn-primary btn-sm">Edit</a>
+				
+				{% if is_granted('ROLE_ADMIN') %}
+				<twig:DeleteButton
+					:action="path('app_book_delete', {id: book.id})"
+					:tokenId="'delete-book-' ~ book.id"
+					:message="'Supprimer « ' ~ book.title ~ ' » ? Cette action est définitive.'" />
+				{% endif %}
 			</div>
         </div>
     </div>

@@ -74,4 +74,10 @@ class BookService
 		$this->em->persist($book);
         $this->em->flush();
 	}
+
+	public function deleteBook(Book $book): void
+	{
+		$this->em->remove($book);
+		$this->em->flush();
+	}
 }

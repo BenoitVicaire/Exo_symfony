@@ -139,4 +139,25 @@ final class BookController extends AbstractController
 		]);
 	}
 
+	#[Route('/books/{id}/delete', name:'app_book_delete',methods:['POST'], requirements: ['id' => '\d+'] )]
+	public function deleteBook(int $id, Request $request):Response
+	{
+		$book = $this->bookService->getBookById($id);
+		if ($book === null) {
+			throw $this->createNotFoundException('Livre non trouvé');
+		}
+		$this->denyAccessUnlessGranted(BookVoter::DELETE, $book, "Vous n'êtes pas autorisé à supprimer ce livre");
+
+		if(!$this->isCsrfTokenValid('delete-book-' . $book->getId(), $request->request->get('_token'))){
+			throw $this->createAccessDeniedException('Token invalid');
+		}
+
+		$this->bookService->deleteBook($book);
+
+		$this->addFlash('success', 'Livre ' . $book->getTitle() . ' supprimé');
+
+		return $this->redirectToRoute('app_book_all');
+
+	}
+
 }
